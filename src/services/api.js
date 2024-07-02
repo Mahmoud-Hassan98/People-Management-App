@@ -1,4 +1,3 @@
-// services/api.js
 const API_URL = 'http://localhost:6011/REST/ppl';
 
 export const fetchPeople = async () => {
@@ -13,7 +12,6 @@ export const fetchPeople = async () => {
   }
 };
 
-// services/api.js
 export const addPerson = async (person) => {
     try {
       const response = await fetch(API_URL, {
@@ -31,7 +29,7 @@ export const addPerson = async (person) => {
       console.error(error);
     }
   };
-  // services/api.js
+  
 export const updatePerson = async (id, updatedPerson) => {
     try {
       const response = await fetch(`${API_URL}?id=${id}`, {
@@ -50,7 +48,6 @@ export const updatePerson = async (id, updatedPerson) => {
     }
   };
   
-  // services/api.js
 export const deletePerson = async (id) => {
     try {
       const response = await fetch(`${API_URL}?id=${id}`, {

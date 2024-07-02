@@ -1,51 +1,56 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import "./AddPersonModal.css"; 
+import "./AddPersonModal.css";
 
+// Set the root element for the modal
 Modal.setAppElement("#root");
 
 const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
+  // State for form data and errors
   const [formData, setFormData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    description: '',
-    dob: '',
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    description: "",
+    dob: "",
     isMale: false,
   });
   const [errors, setErrors] = useState({});
 
+  // Handle input changes in the form
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
+  // Validate form fields
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.firstName) newErrors.firstName = 'First name is required';
-    if (!formData.lastName) newErrors.lastName = 'Last name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.dob) newErrors.dob = 'Date of birth is required';
+    if (!formData.firstName) newErrors.firstName = "First name is required";
+    if (!formData.lastName) newErrors.lastName = "Last name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.dob) newErrors.dob = "Date of birth is required";
     return newErrors;
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
       onSave(formData); // Use the onSave prop to handle saving the person
       setFormData({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: '',
-        description: '',
-        dob: '',
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        email: "",
+        description: "",
+        dob: "",
         isMale: false,
       });
       setErrors({});
@@ -77,9 +82,10 @@ const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
               value={formData.firstName}
               onChange={handleChange}
               className="border rounded p-2"
-              
             />
-            {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -107,9 +113,10 @@ const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
               value={formData.lastName}
               onChange={handleChange}
               className="border rounded p-2"
-              
             />
-            {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+            {errors.lastName && (
+              <p className="text-red-500 text-sm">{errors.lastName}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -123,9 +130,10 @@ const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
               value={formData.email}
               onChange={handleChange}
               className="border rounded p-2"
-              
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -152,7 +160,6 @@ const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
               value={formData.dob}
               onChange={handleChange}
               className="border rounded p-2"
-              
             />
             {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
           </div>
@@ -166,7 +173,10 @@ const AddPersonModal = ({ isOpen, onRequestClose, onSave }) => {
               onChange={handleChange}
               className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
             />
-            <label htmlFor="isMale" className="ml-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="isMale"
+              className="ml-2 block text-sm font-medium text-gray-700"
+            >
               Is Male
             </label>
           </div>

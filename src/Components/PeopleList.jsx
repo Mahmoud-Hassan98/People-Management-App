@@ -1,58 +1,60 @@
-import React, { useState , useEffect} from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { FaPlus } from "react-icons/fa";
+import {Button,Dialog,DialogActions,DialogContent,DialogTitle,} from "@material-ui/core";
 import AddPersonModal from "./AddPersonModal";
 import UpdatePersonForm from "./UpdatePersonForm";
 import {
-  fetchPeople,
-  addPerson,
-  updatePerson,
-  deletePerson,
+  fetchPeople, // function to fetch the list of people
+  addPerson, //function to add a new person to the database
+  updatePerson, //function to update the details of an existing person in the database
+  deletePerson, // function to delete a person from the database
 } from "../services/api.js";
-import { FaPlus } from "react-icons/fa";
 
 const PeopleList = () => {
-  const [persons, setPersons] = useState([]);
-  const [filteredPersons, setFilteredPersons] = useState([]);
-  const [selectedPerson, setSelectedPerson] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [personToDelete, setPersonToDelete] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  // State variables
+  const [persons, setPersons] = useState([]); // List of all persons
+  const [filteredPersons, setFilteredPersons] = useState([]); // Filtered list based on search query
+  const [selectedPerson, setSelectedPerson] = useState(null); // Person selected for editing
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal visibility
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // State for add modal visibility
+  const [personToDelete, setPersonToDelete] = useState(null); // Person selected for deletion
+  const [open, setOpen] = useState(false); // State for delete confirmation dialog
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
 
+  // Close delete confirmation dialog
   const handleCancelDelete = () => {
     setOpen(false);
   };
 
+  // Close add person modal
   const handleCloseAddModal = () => {
     setIsAddModalOpen(false);
   };
 
+  // Open add person modal
   const handleOpenAddModal = () => {
     setIsAddModalOpen(true);
   };
 
+  // Open edit person modal with selected person data
   const handleOpenEditModal = (person) => {
     setSelectedPerson(person);
     setIsEditModalOpen(true);
   };
 
+  // Close edit person modal
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedPerson(null);
   };
 
+  // Add a new person
   const handleAddPerson = async (person) => {
-    const newPerson = await addPerson(person);
-    setPersons([...persons, newPerson]);
+    await addPerson(person);
+    setPersons([...persons, person]);
   };
 
+  // Update an existing person
   const handleUpdatePerson = async (updatedPerson) => {
     const { id } = updatedPerson;
     await updatePerson(id, updatedPerson);
@@ -62,22 +64,26 @@ const PeopleList = () => {
     setSelectedPerson(null);
   };
 
+  // Initiate person deletion confirmation
   const handleDelete = (personId) => {
     setPersonToDelete(personId);
     setOpen(true);
   };
 
+  // Confirm and delete a person
   const handleDeletePerson = async () => {
     await deletePerson(personToDelete);
     setPersons(persons.filter((person) => person.id !== personToDelete));
     setOpen(false);
   };
 
+  // Handle search input change
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     filterPersons(event.target.value);
   };
 
+  // Filter persons based on search query
   const filterPersons = (query) => {
     const filtered = persons.filter(
       (person) =>
@@ -88,18 +94,16 @@ const PeopleList = () => {
     setFilteredPersons(filtered);
   };
 
-  //   const resetFilter = () => {
-  //     setSearchQuery("");
-  //     setFilteredPersons([]);
-  //   };
+  // Load initial data on component mount
+  const loadPeople = async () => {
+    const data = await fetchPeople();
+    setPersons(data || []);
+  };
 
-     const loadPeople = async () => {
-      const data = await fetchPeople();
-      setPersons(data || []);
-    };
-    useEffect(() => {
-      loadPeople();
-    }, []);
+  // Load initial data on component mount using useEffect
+  useEffect(() => {
+    loadPeople();
+  }, []); // Empty dependency array ensures it runs only once on mount
   return (
     <>
       <div className="container mx-auto p-4">
@@ -107,11 +111,11 @@ const PeopleList = () => {
           People Management Application
         </h1>
         <button
-  onClick={handleOpenAddModal}
-  className="flex items-center px-3 py-2 bg-purple-600 text-white rounded text-sm md:text-base hover:bg-purple-700 transition-colors duration-300 ml-auto my-2"
->
-  <FaPlus size={20} color="white" className="mr-1" /> Add Person
-</button>
+          onClick={handleOpenAddModal}
+          className="flex items-center px-3 py-2 bg-purple-600 text-white rounded text-sm md:text-base hover:bg-purple-700 transition-colors duration-300 ml-auto my-2"
+        >
+          <FaPlus size={20} color="white" className="mr-1" /> Add Person
+        </button>
 
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <div className="pb-4 bg-white dark:bg-gray-900">
@@ -212,7 +216,9 @@ const PeopleList = () => {
                     {person.lastName}
                   </td>
                   <td className="px-6 py-4">{person.email}</td>
-                  <td className="px-6 py-4">{new Date(person.dob).toLocaleDateString()}</td>
+                  <td className="px-6 py-4">
+                    {new Date(person.dob).toLocaleDateString()}
+                  </td>
                   <td className="px-6 py-4 space-x-2">
                     <button
                       onClick={() => handleOpenEditModal(person)}

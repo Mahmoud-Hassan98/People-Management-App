@@ -3,72 +3,77 @@ import Modal from "react-modal";
 import PropTypes from "prop-types";
 import "./AddPersonModal.css"; 
 
+// Set the root element for the modal
 Modal.setAppElement("#root");
 
 const UpdatePersonForm = ({ isOpen, onRequestClose, onSave, currentPerson }) => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    description: '',
-    dob: '',
-    isMale: false,
-  });
-  const [errors, setErrors] = useState({});
+ // State for form data and errors
+ const [formData, setFormData] = useState({
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  email: '',
+  description: '',
+  dob: '',
+  isMale: false,
+});
+const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    if (currentPerson) {
-      setFormData({
-        firstName: currentPerson.firstName,
-        middleName: currentPerson.middleName,
-        lastName: currentPerson.lastName,
-        email: currentPerson.email,
-        description: currentPerson.description,
-        dob: currentPerson.dob,
-        isMale: currentPerson.isMale,
-      });
-    }
-  }, [currentPerson]);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+// Effect to update form data when currentPerson changes
+useEffect(() => {
+  if (currentPerson) {
     setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      firstName: currentPerson.firstName || '',
+      middleName: currentPerson.middleName || '',
+      lastName: currentPerson.lastName || '',
+      email: currentPerson.email || '',
+      description: currentPerson.description || '',
+      dob: currentPerson.dob || '',
+      isMale: currentPerson.isMale || false,
     });
-  };
+  }
+}, [currentPerson]);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.firstName) newErrors.firstName = 'First name is required';
-    if (!formData.lastName) newErrors.lastName = 'Last name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.dob) newErrors.dob = 'Date of birth is required';
-    return newErrors;
-  };
+// Handle input changes in the form
+const handleChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setFormData({
+    ...formData,
+    [name]: type === 'checkbox' ? checked : value,
+  });
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length === 0) {
-      onSave({ ...currentPerson, ...formData }); // Merge currentPerson data with updated formData
-      setFormData({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: '',
-        description: '',
-        dob: '',
-        isMale: false,
-      });
-      setErrors({});
-      onRequestClose();
-    } else {
-      setErrors(formErrors);
-    }
-  };
+// Validate form fields
+const validateForm = () => {
+  const newErrors = {};
+  if (!formData.firstName) newErrors.firstName = 'First name is required';
+  if (!formData.lastName) newErrors.lastName = 'Last name is required';
+  if (!formData.email) newErrors.email = 'Email is required';
+  if (!formData.dob) newErrors.dob = 'Date of birth is required';
+  return newErrors;
+};
 
+// Handle form submission
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const formErrors = validateForm();
+  if (Object.keys(formErrors).length === 0) {
+    onSave({ ...currentPerson, ...formData }); // Merge currentPerson data with updated formData
+    setFormData({
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      email: '',
+      description: '',
+      dob: '',
+      isMale: false,
+    });
+    setErrors({});
+    onRequestClose(); // Close the modal after saving
+  } else {
+    setErrors(formErrors);
+  }
+};
   return (
     <Modal
       isOpen={isOpen}
