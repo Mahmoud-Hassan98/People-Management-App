@@ -1,5 +1,7 @@
 # People Management App
- 
+
+## :computer: Technologies Used
+
 People Management utilizes the following technologies:
 
 - React: JavaScript library for building user interfaces.
