@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:6011/REST/ppl';
+const API_URL = 'https://sendmail.iconsjo.space/REST/ppl';
 
 export const fetchPeople = async () => {
   try {

@@ -9,13 +9,13 @@ Modal.setAppElement("#root");
 const UpdatePersonForm = ({ isOpen, onRequestClose, onSave, currentPerson }) => {
  // State for form data and errors
  const [formData, setFormData] = useState({
-  firstName: '',
-  middleName: '',
-  lastName: '',
+  first_name: '',
+  middle_name: '',
+  last_name: '',
   email: '',
   description: '',
   dob: '',
-  isMale: false,
+  is_male: false,
 });
 const [errors, setErrors] = useState({});
 
@@ -23,13 +23,13 @@ const [errors, setErrors] = useState({});
 useEffect(() => {
   if (currentPerson) {
     setFormData({
-      firstName: currentPerson.firstName || '',
-      middleName: currentPerson.middleName || '',
-      lastName: currentPerson.lastName || '',
+      first_name: currentPerson.first_name || '',
+      middle_name: currentPerson.middle_name || '',
+      last_name: currentPerson.last_name || '',
       email: currentPerson.email || '',
       description: currentPerson.description || '',
       dob: currentPerson.dob || '',
-      isMale: currentPerson.isMale || false,
+      is_male: currentPerson.is_male || false,
     });
   }
 }, [currentPerson]);
@@ -46,8 +46,8 @@ const handleChange = (e) => {
 // Validate form fields
 const validateForm = () => {
   const newErrors = {};
-  if (!formData.firstName) newErrors.firstName = 'First name is required';
-  if (!formData.lastName) newErrors.lastName = 'Last name is required';
+  if (!formData.first_name) newErrors.first_name = 'First name is required';
+  if (!formData.last_name) newErrors.last_name = 'Last name is required';
   if (!formData.email) newErrors.email = 'Email is required';
   if (!formData.dob) newErrors.dob = 'Date of birth is required';
   return newErrors;
@@ -60,13 +60,13 @@ const handleSubmit = (e) => {
   if (Object.keys(formErrors).length === 0) {
     onSave({ ...currentPerson, ...formData }); // Merge currentPerson data with updated formData
     setFormData({
-      firstName: '',
-      middleName: '',
-      lastName: '',
+      first_name: '',
+      middle_name: '',
+      last_name: '',
       email: '',
       description: '',
       dob: '',
-      isMale: false,
+      is_male: false,
     });
     setErrors({});
     onRequestClose(); // Close the modal after saving
@@ -86,49 +86,49 @@ const handleSubmit = (e) => {
         <h2 className="text-2xl mb-4">Update Person</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">
-            <label htmlFor="firstName" className="text-lg">
+            <label htmlFor="first_name" className="text-lg">
               First Name <span className="text-red-500">*</span>
             </label>
             <input
-              id="firstName"
-              name="firstName"
+              id="first_name"
+              name="first_name"
               type="text"
-              value={formData.firstName}
+              value={formData.first_name}
               onChange={handleChange}
               className="border rounded p-2"
               
             />
-            {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+            {errors.first_name && <p className="text-red-500 text-sm">{errors.first_name}</p>}
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="middleName" className="text-lg">
+            <label htmlFor="middle_name" className="text-lg">
               Middle Name
             </label>
             <input
-              id="middleName"
-              name="middleName"
+              id="middle_name"
+              name="middle_name"
               type="text"
-              value={formData.middleName}
+              value={formData.middle_name}
               onChange={handleChange}
               className="border rounded p-2"
             />
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="lastName" className="text-lg">
+            <label htmlFor="last_name" className="text-lg">
               Last Name <span className="text-red-500">*</span>
             </label>
             <input
-              id="lastName"
-              name="lastName"
+              id="last_name"
+              name="last_name"
               type="text"
-              value={formData.lastName}
+              value={formData.last_name}
               onChange={handleChange}
               className="border rounded p-2"
               
             />
-            {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+            {errors.last_name && <p className="text-red-500 text-sm">{errors.last_name}</p>}
           </div>
 
           <div className="flex flex-col">
@@ -177,14 +177,14 @@ const handleSubmit = (e) => {
 
           <div className="flex items-center">
             <input
-              id="isMale"
-              name="isMale"
+              id="is_male"
+              name="is_male"
               type="checkbox"
-              checked={formData.isMale}
+              checked={formData.is_male}
               onChange={handleChange}
               className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
             />
-            <label htmlFor="isMale" className="ml-2 block text-sm font-medium text-gray-700">
+            <label htmlFor="is_male" className="ml-2 block text-sm font-medium text-gray-700">
               Is Male
             </label>
           </div>
@@ -215,13 +215,13 @@ UpdatePersonForm.propTypes = {
   onRequestClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   currentPerson: PropTypes.shape({
-    firstName: PropTypes.string,
-    middleName: PropTypes.string,
-    lastName: PropTypes.string,
+    first_name: PropTypes.string,
+    middle_name: PropTypes.string,
+    last_name: PropTypes.string,
     email: PropTypes.string,
     description: PropTypes.string,
     dob: PropTypes.string,
-    isMale: PropTypes.bool,
+    is_male: PropTypes.bool,
   }).isRequired,
 };
 

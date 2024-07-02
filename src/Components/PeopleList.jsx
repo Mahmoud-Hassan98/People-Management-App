@@ -13,7 +13,7 @@ import {
 const PeopleList = () => {
   // State variables
   const [persons, setPersons] = useState([]); // List of all persons
-  const [filteredPersons, setFilteredPersons] = useState([]); // Filtered list based on search query
+  const [filteredPersons, setFilteredPersons] = useState([]);// Filtered list based on search query
   const [selectedPerson, setSelectedPerson] = useState(null); // Person selected for editing
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal visibility
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); // State for add modal visibility
@@ -50,9 +50,21 @@ const PeopleList = () => {
 
   // Add a new person
   const handleAddPerson = async (person) => {
-    await addPerson(person);
-    setPersons([...persons, person]);
+    try {
+      const newPerson = await addPerson(person);
+      console.log(newPerson.data);
+  
+      // Ensure newPerson.data is an array and has at least one element
+      if (Array.isArray(newPerson.data) && newPerson.data.length > 0) {
+        setPersons([...persons, newPerson.data[0]]);
+      } else {
+        console.error("newPerson.data is not a valid array or it's empty:", newPerson.data);
+      }
+    } catch (error) {
+      console.error("Failed to add person:", error);
+    }
   };
+  
 
   // Update an existing person
   const handleUpdatePerson = async (updatedPerson) => {
@@ -87,19 +99,18 @@ const PeopleList = () => {
   const filterPersons = (query) => {
     const filtered = persons.filter(
       (person) =>
-        person.firstName.toLowerCase().includes(query.toLowerCase()) ||
-        person.lastName.toLowerCase().includes(query.toLowerCase()) ||
+        person.first_name.toLowerCase().includes(query.toLowerCase()) ||
+        person.last_name.toLowerCase().includes(query.toLowerCase()) ||
         person.email.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredPersons(filtered);
   };
 
   // Load initial data on component mount
-  const loadPeople = async () => {
-    const data = await fetchPeople();
-    setPersons(data || []);
-  };
-
+const loadPeople = async () => {
+  const data = await fetchPeople();
+  setPersons(Array.isArray(data.data) ? data.data : []);
+};
   // Load initial data on component mount using useEffect
   useEffect(() => {
     loadPeople();
@@ -207,13 +218,13 @@ const PeopleList = () => {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {person.firstName}
+                    {person.first_name}
                   </td>
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {person.lastName}
+                    {person.last_name}
                   </td>
                   <td className="px-6 py-4">{person.email}</td>
                   <td className="px-6 py-4">
